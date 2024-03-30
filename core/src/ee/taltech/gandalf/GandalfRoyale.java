@@ -29,9 +29,9 @@ public class GandalfRoyale extends Game {
         try {
             nc = new NetworkClient(screenController);
         } catch (RuntimeException e) {
-            setScreen(new SweepingState(this));
+            System.out.println("No server!");
         }
-
+        setScreen(new SweepingState(this));
         //screenController.setMenuScreen(); // Set MenuScreen as the first screen.
     }
 

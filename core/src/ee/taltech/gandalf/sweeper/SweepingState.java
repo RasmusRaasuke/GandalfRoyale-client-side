@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -25,7 +26,8 @@ public class SweepingState extends ScreenAdapter {
     final OrthographicCamera camera;
     final TmxMapLoader mapLoader;
     final TiledMap map;
-    final ShapeRenderer shapeRenderer;
+    Box2DDebugRenderer debugRenderer; // For debugging
+    Sweeper sweeper;
 
     public SweepingState(GandalfRoyale game) {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
@@ -45,16 +47,13 @@ public class SweepingState extends ScreenAdapter {
 
         new WorldCollision(world, map);
 
-        shapeRenderer = new ShapeRenderer();
+        sweeper = new Sweeper(world);
 
-//        SweeperClock tickRateLoop = new SweeperClock(this); // Create a running TPS loop.
-//        Thread tickRateThread = new Thread(tickRateLoop); // Run TPS parallel to other processes.
-//        tickRateThread.start();
+        debugRenderer = new Box2DDebugRenderer();
     }
 
     @Override
     public void render(float delta) {
-        System.out.println("Works?");
         ScreenUtils.clear(0, 0, 0, 0);
         world.step(delta, 6, 2);
 
@@ -68,22 +67,20 @@ public class SweepingState extends ScreenAdapter {
         // Set camera projection matrix
         game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        camera.zoom = 2f; // To render 2X bigger area than seen.
         renderer.setView(camera);
         renderer.render();
-        camera.zoom = 1f; // Reset the camera back to its original state.
-        game.batch.end();
 
-        // Render shapes
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        // Draw missing health bar
-        shapeRenderer.setColor(Color.FIREBRICK);
-        shapeRenderer.rect(0, 0, (float) 100 * 2, 5);
-        // Stop rendering shapes
-        shapeRenderer.end();
+        debugRenderer.render(world, camera.combined);
     }
 
-
+    /**
+     * Correct camera position when resizing window.
+     *
+     * @param width window width
+     * @param height window height
+     */
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+    }
 }
