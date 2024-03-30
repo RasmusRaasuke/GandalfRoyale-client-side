@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ee.taltech.gandalf.network.NetworkClient;
 import ee.taltech.gandalf.screens.ScreenController;
+import ee.taltech.gandalf.sweeper.SweepingState;
 
 public class GandalfRoyale extends Game {
     public SpriteBatch batch;
@@ -28,10 +29,10 @@ public class GandalfRoyale extends Game {
         try {
             nc = new NetworkClient(screenController);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            setScreen(new SweepingState(this));
         }
 
-        screenController.setMenuScreen(); // Set MenuScreen as the first screen.
+        //screenController.setMenuScreen(); // Set MenuScreen as the first screen.
     }
 
     /**
