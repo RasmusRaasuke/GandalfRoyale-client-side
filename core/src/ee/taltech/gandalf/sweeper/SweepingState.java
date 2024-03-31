@@ -10,9 +10,15 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.gandalf.GandalfRoyale;
 import ee.taltech.gandalf.world.WorldCollision;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.Format;
 
 public class SweepingState extends ScreenAdapter {
 
@@ -25,16 +31,17 @@ public class SweepingState extends ScreenAdapter {
     final TmxMapLoader mapLoader;
     final TiledMap map;
     Box2DDebugRenderer debugRenderer; // For debugging
-    SweeperShadow sweeperShadow;
     Sweeper sweeper;
     int xPos;
     int yPos;
+    int slotValue = 0;
+    StringBuilder line = new StringBuilder("{");
 
     public SweepingState(GandalfRoyale game) {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
         world.setContinuousPhysics(false);
         world.setAutoClearForces(false);
-        sweeperListener = new SweeperListener();
+        sweeperListener = new SweeperListener(this);
         world.setContactListener(sweeperListener);
 
         this.game = game;
@@ -50,21 +57,44 @@ public class SweepingState extends ScreenAdapter {
 
         new WorldCollision(world, map);
 
-        sweeperShadow = new SweeperShadow(this);
         sweeper = new Sweeper(this);
 
         debugRenderer = new Box2DDebugRenderer();
     }
 
+    private void constructLine() {
+        if (xPos == 4 && yPos != 4) {
+            line.replace(line.length - 2, line.length, "},");
+            writeToFile(line.toString());
+            line.clear();
+            line.append("{");
+            line.append(slotValue);
+        } else {
+            line.append(slotValue);
+            line.append(", ");
+        }
+    }
+
+    private void writeToFile(String input) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("GridOutPut.txt", true))) {
+            writer.write(input);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 0);
-        xPos = sweeperShadow.xPosition % 9604 == 0 ? 4 : sweeperShadow.xPosition + 8;
-        yPos = xPos == 4 ? sweeperShadow.yPosition + 8 : sweeperShadow.yPosition;
-        if (sweeperShadow.xPosition == 0) yPos = 4;
+        slotValue = 0;
+        world.step(delta, 6, 2);
 
-        sweeperShadow.setPosition(xPos, yPos);
-        sweeper.setPosition(sweeperShadow);
+        ScreenUtils.clear(0, 0, 0, 0);
+        xPos = sweeper.xPosition % 9604 == 0 ? 4 : sweeper.xPosition + 8;
+        yPos = xPos == 4 ? sweeper.yPosition + 8 : sweeper.yPosition;
+        if (sweeper.xPosition == 0) yPos = 4;
+
+        sweeper.setPosition(xPos, yPos);
 
         // Update camera position to follow player
         camera.position.x = sweeper.xPosition;
@@ -79,7 +109,7 @@ public class SweepingState extends ScreenAdapter {
         renderer.setView(camera);
         renderer.render();
 
-        world.step(delta, 6, 2);
+        constructLine();
 
         debugRenderer.render(world, camera.combined);
     }

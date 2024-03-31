@@ -8,10 +8,10 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Sweeper {
 
-    static final int WIDTH = 2;
-    static final int HEIGHT = 2;
+    static final int WIDTH = 4;
+    static final int HEIGHT = 4;
     Body body;
-    int xPosition = 0;
+    int xPosition = 4;
     int yPosition = 4;
 
     public Sweeper(SweepingState state) {
@@ -27,7 +27,7 @@ public class Sweeper {
         // Create a dynamic or static body for the player
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(4, 4);
+        bodyDef.position.set(xPosition, yPosition);
         bodyDef.fixedRotation = true;
         Body hitBoxBody = world.createBody(bodyDef);
 
@@ -45,18 +45,13 @@ public class Sweeper {
         // Clean up
         hitBoxShape.dispose();
 
+        hitBoxBody.getFixtureList().get(0).setUserData(this);
         this.body = hitBoxBody;
     }
 
-    public void setPosition(SweeperShadow shadow) {
-        xPosition = shadow.xPosition;
-        yPosition = shadow.yPosition;
-        body.setTransform(shadow.xPosition, shadow.yPosition, shadow.body.getAngle());
-        body.setLinearVelocity(shadow.body.getLinearVelocity());
-        body.setAngularVelocity(shadow.body.getAngularVelocity());
-        body.setLinearDamping(shadow.body.getLinearDamping());
-        body.setAngularDamping(shadow.body.getAngularDamping());
-        body.setGravityScale(shadow.body.getGravityScale());
-        body.setMassData(shadow.body.getMassData());
+    public void setPosition(int xPosition, int yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        body.setTransform(xPosition, yPosition, body.getAngle());
     }
 }

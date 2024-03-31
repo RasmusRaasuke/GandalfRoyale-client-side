@@ -4,16 +4,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class SweeperListener implements ContactListener {
 
-    public SweeperListener() {
+    SweepingState state;
+
+    public SweeperListener(SweepingState state) {
+        this.state = state;
     }
     @Override
     public void beginContact(Contact contact) {
-        if (contact.getFixtureA().getBody().getType() == BodyDef.BodyType.KinematicBody
-                || contact.getFixtureB().getBody().getType() == BodyDef.BodyType.KinematicBody) {
-            // Do nothing, it is your shadow
-        } else {
-            System.out.println("1");
-        }
+        state.slotValue = 1;
     }
 
     @Override
