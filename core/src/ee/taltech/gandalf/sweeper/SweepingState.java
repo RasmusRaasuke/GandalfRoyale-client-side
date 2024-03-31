@@ -25,6 +25,7 @@ public class SweepingState extends ScreenAdapter {
     final TmxMapLoader mapLoader;
     final TiledMap map;
     Box2DDebugRenderer debugRenderer; // For debugging
+    SweeperShadow sweeperShadow;
     Sweeper sweeper;
     int xPos;
     int yPos;
@@ -33,7 +34,7 @@ public class SweepingState extends ScreenAdapter {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
         world.setContinuousPhysics(false);
         world.setAutoClearForces(false);
-        sweeperListener = new SweeperListener(world);
+        sweeperListener = new SweeperListener();
         world.setContactListener(sweeperListener);
 
         this.game = game;
@@ -49,7 +50,8 @@ public class SweepingState extends ScreenAdapter {
 
         new WorldCollision(world, map);
 
-        sweeper = new Sweeper(world);
+        sweeperShadow = new SweeperShadow(this);
+        sweeper = new Sweeper(this);
 
         debugRenderer = new Box2DDebugRenderer();
     }
@@ -57,11 +59,12 @@ public class SweepingState extends ScreenAdapter {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 0);
-        xPos = sweeper.xPosition % 9604 == 0 ? 4 : sweeper.xPosition + 8;
-        yPos = xPos == 4 ? sweeper.yPosition + 8 : sweeper.yPosition;
-        if (sweeper.xPosition == 0) yPos = 4;
+        xPos = sweeperShadow.xPosition % 9604 == 0 ? 4 : sweeperShadow.xPosition + 8;
+        yPos = xPos == 4 ? sweeperShadow.yPosition + 8 : sweeperShadow.yPosition;
+        if (sweeperShadow.xPosition == 0) yPos = 4;
 
-        sweeper.setPosition(xPos, yPos);
+        sweeperShadow.setPosition(xPos, yPos);
+        sweeper.setPosition(sweeperShadow);
 
         // Update camera position to follow player
         camera.position.x = sweeper.xPosition;
