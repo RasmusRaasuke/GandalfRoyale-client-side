@@ -1,9 +1,7 @@
 package ee.taltech.gandalf.sweeper;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -28,6 +26,8 @@ public class SweepingState extends ScreenAdapter {
     final TiledMap map;
     Box2DDebugRenderer debugRenderer; // For debugging
     Sweeper sweeper;
+    int xPos;
+    int yPos;
 
     public SweepingState(GandalfRoyale game) {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
@@ -55,11 +55,15 @@ public class SweepingState extends ScreenAdapter {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 0);
-        world.step(delta, 6, 2);
+        xPos = sweeper.xPosition % 9604 == 0 ? 4 : sweeper.xPosition + 8;
+        yPos = xPos == 4 ? sweeper.yPosition + 8 : sweeper.yPosition;
+        if (sweeper.xPosition == 0) yPos = 4;
+
+        sweeper.setPosition(xPos, yPos);
 
         // Update camera position to follow player
-        camera.position.x = 0;
-        camera.position.y = 0;
+        camera.position.x = sweeper.xPosition;
+        camera.position.y = sweeper.yPosition;
 
         // Update camera matrices
         camera.update();
@@ -69,6 +73,8 @@ public class SweepingState extends ScreenAdapter {
 
         renderer.setView(camera);
         renderer.render();
+
+        world.step(delta, 6, 2);
 
         debugRenderer.render(world, camera.combined);
     }

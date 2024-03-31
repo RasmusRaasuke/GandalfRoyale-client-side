@@ -6,11 +6,11 @@ import ee.taltech.gandalf.entities.PlayerCharacter;
 
 public class Sweeper {
 
-    static final int WIDTH = 8;
-    static final int HEIGHT = 8;
+    static final int WIDTH = 4;
+    static final int HEIGHT = 4;
     Body body;
-    int xPosition;
-    int yPosition;
+    int xPosition = 0;
+    int yPosition = 4;
 
     public Sweeper(World world) {
         createBody(world);
@@ -24,8 +24,8 @@ public class Sweeper {
     public void createBody(World world) {
         // Create a dynamic or static body for the player
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(xPosition, yPosition);
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(4, 4);
         bodyDef.fixedRotation = true;
         Body hitBoxBody = world.createBody(bodyDef);
 
@@ -38,13 +38,18 @@ public class Sweeper {
         fixtureDef.shape = hitBoxShape;
         hitBoxBody.createFixture(fixtureDef);
 
-        hitBoxBody.setLinearVelocity(new Vector2(0,0));
-        hitBoxBody.setAngularVelocity(0);
+        hitBoxBody.setFixedRotation(true);
 
         // Clean up
         hitBoxShape.dispose();
 
         hitBoxBody.setUserData(this);
         this.body = hitBoxBody;
+    }
+
+    public void setPosition(int xPosition, int yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        body.setTransform(xPosition, yPosition, body.getAngle());
     }
 }
