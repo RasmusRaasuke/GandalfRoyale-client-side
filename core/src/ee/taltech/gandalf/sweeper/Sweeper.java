@@ -24,7 +24,7 @@ public class Sweeper {
     public void createBody(World world) {
         // Create a dynamic or static body for the player
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(4, 4);
         bodyDef.fixedRotation = true;
         Body hitBoxBody = world.createBody(bodyDef);

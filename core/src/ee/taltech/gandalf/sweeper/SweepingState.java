@@ -7,18 +7,18 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.gandalf.GandalfRoyale;
-import ee.taltech.gandalf.entities.collision.CollisionHandler;
 import ee.taltech.gandalf.world.WorldCollision;
 
 public class SweepingState extends ScreenAdapter {
 
     final GandalfRoyale game;
     final World world;
-    final CollisionHandler collisionHandler;
+    final ContactListener sweeperListener;
     final OrthogonalTiledMapRenderer renderer;
     final ExtendViewport viewport;
     final OrthographicCamera camera;
@@ -31,8 +31,10 @@ public class SweepingState extends ScreenAdapter {
 
     public SweepingState(GandalfRoyale game) {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
-        collisionHandler = new CollisionHandler();
-        world.setContactListener(new CollisionHandler());
+        world.setContinuousPhysics(false);
+        world.setAutoClearForces(false);
+        sweeperListener = new SweeperListener(world);
+        world.setContactListener(sweeperListener);
 
         this.game = game;
 
