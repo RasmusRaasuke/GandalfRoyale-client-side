@@ -18,7 +18,6 @@ import ee.taltech.gandalf.world.WorldCollision;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.Format;
 
 public class SweepingState extends ScreenAdapter {
 
@@ -37,6 +36,11 @@ public class SweepingState extends ScreenAdapter {
     int slotValue = 0;
     StringBuilder line = new StringBuilder("{");
 
+    /**
+     * Construct sweeper.
+     *
+     * @param game game where the sweeper is working
+     */
     public SweepingState(GandalfRoyale game) {
         world = new World(new Vector2(0, 0), true); // Create a new Box2D world
         world.setContinuousPhysics(false);
@@ -62,8 +66,11 @@ public class SweepingState extends ScreenAdapter {
         debugRenderer = new Box2DDebugRenderer();
     }
 
+    /**
+     * Construct one line of 1-s and 0-s.
+     */
     private void constructLine() {
-        if (xPos == 4 && yPos != 4) {
+        if (xPos == 4 && yPos != 4) { // Write it into a file, if sweeper in now on the new line
             line.replace(line.length - 2, line.length, "},");
             writeToFile(line.toString());
             line.clear();
@@ -75,6 +82,11 @@ public class SweepingState extends ScreenAdapter {
         }
     }
 
+    /**
+     * Write one line of 1-s and 0-s to file.
+     *
+     * @param input given line
+     */
     private void writeToFile(String input) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("GridOutPut.txt", true))) {
             writer.write(input);
@@ -84,6 +96,11 @@ public class SweepingState extends ScreenAdapter {
         }
     }
 
+    /**
+     * Render the sweeping.
+     *
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         slotValue = 0;
@@ -91,8 +108,10 @@ public class SweepingState extends ScreenAdapter {
 
         ScreenUtils.clear(0, 0, 0, 0);
         xPos = sweeper.xPosition % 9604 == 0 ? 4 : sweeper.xPosition + 8;
+        if (yPos % 9604 == 0) {
+            dispose();
+        }
         yPos = xPos == 4 ? sweeper.yPosition + 8 : sweeper.yPosition;
-        if (sweeper.xPosition == 0) yPos = 4;
 
         sweeper.setPosition(xPos, yPos);
 
@@ -109,7 +128,7 @@ public class SweepingState extends ScreenAdapter {
         renderer.setView(camera);
         renderer.render();
 
-        constructLine();
+        constructLine(); // Construct line based on slot value
 
         debugRenderer.render(world, camera.combined);
     }
@@ -123,5 +142,15 @@ public class SweepingState extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+    }
+
+    /**
+     * End the sweeper when it's done.
+     */
+    @Override
+    public void dispose() {
+        world.dispose();
+        debugRenderer.dispose();
+        System.out.println("DONE!");
     }
 }

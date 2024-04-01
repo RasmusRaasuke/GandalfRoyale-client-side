@@ -14,12 +14,17 @@ public class Sweeper {
     int xPosition = 4;
     int yPosition = 4;
 
+    /**
+     * Construct Sweeper.
+     *
+     * @param state the state where rendering takes place
+     */
     public Sweeper(SweepingState state) {
         createBody(state.world);
     }
 
     /**
-     * Create player's hit box.
+     * Create sweeper's hit box.
      *
      * @param world world, where hit boxes are in
      */
@@ -49,6 +54,12 @@ public class Sweeper {
         this.body = hitBoxBody;
     }
 
+    /**
+     * Set sweeper's position.
+     *
+     * @param xPosition new x coordinate
+     * @param yPosition new y coordinate
+     */
     public void setPosition(int xPosition, int yPosition) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
