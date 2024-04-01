@@ -108,7 +108,7 @@ public class SweepingState extends ScreenAdapter {
 
         ScreenUtils.clear(0, 0, 0, 0);
         xPos = sweeper.xPosition % 9604 == 0 ? 4 : sweeper.xPosition + 8;
-        if (yPos % 9604 == 0) {
+        if (yPos == 9604) {
             dispose();
         }
         yPos = xPos == 4 ? sweeper.yPosition + 8 : sweeper.yPosition;
