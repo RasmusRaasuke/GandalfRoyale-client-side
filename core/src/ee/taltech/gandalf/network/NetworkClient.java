@@ -31,6 +31,7 @@ public class NetworkClient {
     ItemListener itemListener;
     MobListener mobListener;
     PlayZoneListener playZoneListener;
+    GameStateListener gameStateListener;
 
 
     /**
@@ -87,6 +88,7 @@ public class NetworkClient {
         kryo.register(UpdateMobHealth.class);
         kryo.register(GameLeave.class);
         kryo.register(GameOver.class);
+        kryo.register(GameLoaded.class);
         kryo.addDefaultSerializer(KeyPress.Action.class, DefaultSerializers.EnumSerializer.class);
         kryo.addDefaultSerializer(ItemTypes.class, DefaultSerializers.EnumSerializer.class);
     }
@@ -97,7 +99,7 @@ public class NetworkClient {
     public void connect() {
         // Connect client with the server.
         try {
-            client.connect(5000, "193.40.255.34", 8080, 8081);
+            client.connect(5000, "localhost", 8080, 8081);
             // 193.40.255.34
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -156,6 +158,7 @@ public class NetworkClient {
         fireballPositionListener = new SpellListener(screenController);
         healthAndManaListener = new HealthAndManaListener(screenController);
         itemListener = new ItemListener(screenController);
+        gameStateListener = new GameStateListener(screenController);
         playZoneListener = new PlayZoneListener(screenController);
         mobListener = new MobListener(screenController);
 

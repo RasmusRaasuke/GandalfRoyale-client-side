@@ -2,6 +2,7 @@ package ee.taltech.gandalf;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -15,6 +16,7 @@ public class GandalfRoyale extends Game {
     public SpriteBatch batch;
     public Viewport viewport;
     public NetworkClient nc;
+    public AssetManager assetManager;
 
     public ScreenController screenController() {
         return screenController;
@@ -27,6 +29,7 @@ public class GandalfRoyale extends Game {
      */
     @Override
     public void create() {
+        assetManager = new AssetManager();
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
 

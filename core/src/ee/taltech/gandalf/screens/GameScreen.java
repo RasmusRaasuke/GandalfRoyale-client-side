@@ -3,6 +3,7 @@ package ee.taltech.gandalf.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -32,6 +32,7 @@ import ee.taltech.gandalf.entities.*;
 import ee.taltech.gandalf.entities.collision.CollisionHandler;
 import ee.taltech.gandalf.input.PlayerInput;
 import ee.taltech.gandalf.network.NetworkClient;
+import ee.taltech.gandalf.network.messages.game.GameLoaded;
 import ee.taltech.gandalf.scenes.Hud;
 import ee.taltech.gandalf.scenes.SettingsWindow;
 import ee.taltech.gandalf.world.TileData;
@@ -46,6 +47,7 @@ import static ee.taltech.gandalf.components.ItemTypes.*;
 
 public class GameScreen extends ScreenAdapter {
     private final World world;
+    private final AssetManager assetManager;
     GandalfRoyale game;
     NetworkClient nc;
 
@@ -113,6 +115,7 @@ public class GameScreen extends ScreenAdapter {
 
         this.game = game;
         this.nc = game.nc;
+        this.assetManager = this.game.assetManager;
 
         setTextures();
 
@@ -124,7 +127,8 @@ public class GameScreen extends ScreenAdapter {
                 Constants.MAX_TILES_SEEN_WIDTH, Constants.MAX_TILES_SEEN_HEIGHT, camera);
         viewport.apply();
 
-        map = mapLoader.load("Gandalf_Royale.tmx");
+        map = game.assetManager.get("Gandalf_Royale.tmx", TiledMap.class);
+
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
         new WorldCollision(world, map, nc);
 
@@ -144,7 +148,14 @@ public class GameScreen extends ScreenAdapter {
         inputMultiplexer.addProcessor(new PlayerInput(game, clientCharacter, this));
 
         layersToBeOrdered = initializeLayersToBeOrdered();
+
+        sendReadyState(lobby);
     }
+
+    private void sendReadyState(Lobby lobby) {
+        nc.sendTCP(new GameLoaded(lobby.getId(), true));
+    }
+
 
     /**
      * Add specific layers to the list.
@@ -209,36 +220,36 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Set all textures.
      */
-    private static void setTextures() {
+    private void setTextures() {
         // *------ BOOK TEXTURES ------*
-        fireballBook = new Texture("Spells/Fireball/fireball_book.png");
-        plasmaBook = new Texture("Spells/Plasma/plasma_book.png");
-        meteorBook = new Texture("Spells/Meteor/meteor_book.png");
-        kunaiBook = new Texture("Spells/Kunai/kunai_book.png");
-        iceShardBook = new Texture("Spells/IceShard/iceshard_book.png");
-        poisonBallBook = new Texture("Spells/Poisonball/poisonball_book.png");
+        fireballBook = assetManager.get("Spells/Fireball/fireball_book.png", Texture.class);
+        plasmaBook = assetManager.get("Spells/Plasma/plasma_book.png", Texture.class);
+        meteorBook = assetManager.get("Spells/Meteor/meteor_book.png", Texture.class);
+        kunaiBook = assetManager.get("Spells/Kunai/kunai_book.png", Texture.class);
+        iceShardBook = assetManager.get("Spells/IceShard/iceshard_book.png", Texture.class);
+        poisonBallBook = assetManager.get("Spells/Poisonball/poisonball_book.png", Texture.class);
 
         // *------ SPELL TEXTURES ------*
-        fireballTexture = new Texture("Spells/Fireball/packFireball.png");
-        plasmaTexture = new Texture("Spells/Plasma/packPlasma.png");
-        meteorTexture = new Texture("Spells/Meteor/packMeteor.png");
-        kunaiTexture = new Texture("Spells/Kunai/packKunai.png");
+        fireballTexture = assetManager.get("Spells/Fireball/packFireball.png", Texture.class);
+        plasmaTexture = assetManager.get("Spells/Plasma/packPlasma.png", Texture.class);
+        meteorTexture = assetManager.get("Spells/Meteor/packMeteor.png", Texture.class);
+        kunaiTexture = assetManager.get("Spells/Kunai/packKunai.png", Texture.class);
 
         // *------ HEALING POTION TEXTURES ------*
-        healingPotionTexture = new Texture("Potion/potion.png");
+        healingPotionTexture = assetManager.get("Potion/potion.png", Texture.class);
 
         // *------ COIN TEXTURE ------*
-        coinTexture = new Texture("Coin/Coin_rotating.png");
+        coinTexture = assetManager.get("Coin/Coin_rotating.png", Texture.class);
 
         // *------ PLAY ZONE TEXTURES ------*
-        firstExpectedZoneTexture = new Texture("Zone/expected_zone.png");
-        otherExpectedZoneTexture = new Texture("Zone/huge_expected_zone.png");
-        otherPlayZoneTexture = new Texture("Zone/hugeNewZone.png");
-        firstPlayZoneTexture = new Texture("Zone/safezone.png");
+        firstExpectedZoneTexture = assetManager.get("Zone/expected_zone.png", Texture.class);
+        otherExpectedZoneTexture = assetManager.get("Zone/huge_expected_zone.png", Texture.class);
+        otherPlayZoneTexture = assetManager.get("Zone/hugeNewZone.png", Texture.class);
+        firstPlayZoneTexture = assetManager.get("Zone/safezone.png", Texture.class);
 
         // *------ PUMPKIN TEXTURE ------*
-        pumpkinAttackingTexture = new Texture("Pumpkin/Pumpkin_Attacking.png");
-        pumpkinWalkingTexture = new Texture("Pumpkin/Pumpkin_Walks.png");
+        pumpkinAttackingTexture = assetManager.get("Pumpkin/Pumpkin_Attacking.png", Texture.class);
+        pumpkinWalkingTexture = assetManager.get("Pumpkin/Pumpkin_Walks.png", Texture.class);
     }
 
     /**
@@ -623,12 +634,12 @@ public class GameScreen extends ScreenAdapter {
 
         // Render game objects
         game.batch.begin();
-        camera.zoom = 3.5f; // To render 3X bigger area than seen.
+        camera.zoom = 3f; // To render 3X bigger area than seen.
         renderer.setView(camera);
         renderer.render(Constants.BACKGROUND_LAYERS);
         game.batch.end();
         renderByLayering(); // Render entities and tiles
-        camera.zoom = 2f; // Reset the camera back to its original state.
+        camera.zoom = 1.5f; // Reset the camera back to its original state.
 
         if (startedGame.getPlayZone() != null) {
             drawPlayZone();

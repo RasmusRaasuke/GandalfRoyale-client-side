@@ -15,10 +15,10 @@ public class Constants {
     public static float KUNAI_HEIGHT = 16 / PPM;
     public static final Integer TILE_WIDTH_OR_HEIGHT = 32;
     public static final Integer MAP_WIDTH_OR_HEIGHT = 300;
-    public static final float MOVEMENT_SPEED = 5;
+    public static final float MOVEMENT_SPEED = 4;
     public static final float INTERP_FACTOR = 0.3f; // For overwrite smoothness
-    public static final float MAX_TILES_SEEN_WIDTH = 22;
-    public static final float MAX_TILES_SEEN_HEIGHT = 12;
+    public static final float MAX_TILES_SEEN_WIDTH = 26;
+    public static final float MAX_TILES_SEEN_HEIGHT = 13;
     public static final float MIN_CHUNKS_SEEN = 10f;
     public static final float STATUS_BAR_WIDTH_PX = 60;
     public static final int FIRST_ZONE_TEXTURE_SIZE = 375;

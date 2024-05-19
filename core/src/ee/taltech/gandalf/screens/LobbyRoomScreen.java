@@ -181,7 +181,7 @@ public class LobbyRoomScreen extends ScreenAdapter {
      * Start the game when host chose.
      */
     public void startGame() {
-        game.screenController.setGameScreen(lobby);
+        game.screenController.setLoadingScreen(lobby);
     }
 
     /**

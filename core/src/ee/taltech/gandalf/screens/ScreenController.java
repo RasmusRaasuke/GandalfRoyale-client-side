@@ -18,6 +18,7 @@ public class ScreenController {
     private GameEndScreen gameEndScreen;
     private ScreenAdapter currentScreen;
     private SettingsWindow settingsWindow;
+    private LoadingScreen loadingScreen;
 
     /**
      * Construct ScreenController.
@@ -74,6 +75,14 @@ public class ScreenController {
             game.setScreen(gameScreen);
             game.nc.addGameListeners();
             currentScreen = gameScreen;
+        });
+    }
+
+    public void setLoadingScreen(Lobby lobby) {
+        Gdx.app.postRunnable(() -> {
+            loadingScreen = new LoadingScreen(game, lobby);
+            game.setScreen(loadingScreen);
+            currentScreen = loadingScreen;
         });
     }
 
