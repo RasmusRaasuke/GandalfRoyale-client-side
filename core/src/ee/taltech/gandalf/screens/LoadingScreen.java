@@ -69,6 +69,8 @@ public class LoadingScreen extends ScreenAdapter {
         image = new Image(loadingImage);
         image.setScaling(Scaling.fillY);
         image.setFillParent(true);
+        stage.addActor(image);
+
         // 2. Add loading tip label
         Label loadingTipLabel = new Label(getRandomTip(), new Label.LabelStyle(font, com.badlogic.gdx.graphics.Color.WHITE));
         table.add(loadingTipLabel);
@@ -78,7 +80,6 @@ public class LoadingScreen extends ScreenAdapter {
         Skin skin = new Skin(Gdx.files.internal("UI/clean-crispy/skin/clean-crispy-ui.json"));
         loadingBar = new ProgressBar(0f, 1f, 0.01f, false, skin);
         table.add(loadingBar).expand().fillX().pad(40).bottom().width(Value.percentWidth(.6f, table));
-        stage.addActor(image);
         // stage.addActor(loadingTipLabel);
         stage.addActor(table);
     }
@@ -160,6 +161,7 @@ public class LoadingScreen extends ScreenAdapter {
         batch.dispose();
         stage.dispose();
         font.dispose();
+        game.nc.removeAllListeners();
     }
 
     public Lobby getLobby() {

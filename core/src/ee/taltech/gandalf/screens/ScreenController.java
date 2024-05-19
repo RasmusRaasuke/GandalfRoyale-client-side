@@ -36,6 +36,7 @@ public class ScreenController {
     public void setMenuScreen() {
         Gdx.app.postRunnable(() -> {
             menuScreen = new MenuScreen(game);
+            game.assetManager.clear();
             game.setScreen(menuScreen);
             currentScreen = menuScreen;
         });
