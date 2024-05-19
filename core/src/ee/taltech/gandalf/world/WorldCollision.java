@@ -64,6 +64,7 @@ public class WorldCollision {
             }
         }
         collisionsCreated = true; // Flag for collision end
+        saveWorld();
     }
 
     /**

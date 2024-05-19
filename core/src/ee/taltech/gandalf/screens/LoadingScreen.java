@@ -45,6 +45,7 @@ public class LoadingScreen extends ScreenAdapter {
     private final ExtendViewport viewport;
     private final Image image;
     private final ProgressBar loadingBar;
+    private boolean loaded;
 
     public LoadingScreen(GandalfRoyale game, Lobby lobby) {
         this.lobby = lobby;
@@ -58,6 +59,8 @@ public class LoadingScreen extends ScreenAdapter {
         // Loading Screen UI Setup
         Table table = new Table();
         table.setFillParent(true);
+
+        loaded = false;
 
         // 1. Then create and add the loading image
 
@@ -121,8 +124,11 @@ public class LoadingScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Iterate the loading queue
-        if (assetManager.update()) {
-            game.nc.sendTCP(new GameLoaded(lobby.getId(), true));
+        assetManager.update();
+        if (assetManager.isFinished() && !loaded) {
+            System.out.println("finished loading");
+            loaded = true;
+            game.screenController.loadGameScreen(lobby);
         }
         // Update loading status
         float progress = assetManager.getProgress();
@@ -130,12 +136,6 @@ public class LoadingScreen extends ScreenAdapter {
         viewport.apply();
         stage.act(delta);
         stage.draw();
-    }
-
-    private void nextScreen() {
-        if (assetManager.isFinished()) {
-            game.screenController.setGameScreen(lobby);
-        }
     }
 
     private String getRandomTip() {
@@ -160,5 +160,9 @@ public class LoadingScreen extends ScreenAdapter {
         batch.dispose();
         stage.dispose();
         font.dispose();
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 }

@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.serializers.DefaultSerializers;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.gandalf.network.listeners.game.*;
+import ee.taltech.gandalf.network.listeners.loading.GameStateListener;
 import ee.taltech.gandalf.screens.ScreenController;
 import ee.taltech.gandalf.components.ItemTypes;
 import ee.taltech.gandalf.network.listeners.lobby.LobbyListener;
@@ -149,6 +150,12 @@ public class NetworkClient {
         client.addListener(lobbyRoomListener);
     }
 
+    public void addLoadingListener() {
+        gameStateListener = new GameStateListener(screenController);
+        listeners.add(gameStateListener);
+        client.addListener(gameStateListener);
+    }
+
     /**
      * Add Game listeners.
      */
@@ -158,7 +165,6 @@ public class NetworkClient {
         fireballPositionListener = new SpellListener(screenController);
         healthAndManaListener = new HealthAndManaListener(screenController);
         itemListener = new ItemListener(screenController);
-        gameStateListener = new GameStateListener(screenController);
         playZoneListener = new PlayZoneListener(screenController);
         mobListener = new MobListener(screenController);
 

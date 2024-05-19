@@ -1,9 +1,11 @@
-package ee.taltech.gandalf.network.listeners.game;
+package ee.taltech.gandalf.network.listeners.loading;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import ee.taltech.gandalf.components.Lobby;
 import ee.taltech.gandalf.network.messages.game.GameLoaded;
 import ee.taltech.gandalf.screens.GameScreen;
+import ee.taltech.gandalf.screens.LoadingScreen;
 import ee.taltech.gandalf.screens.ScreenController;
 
 public class GameStateListener extends Listener {
@@ -27,9 +29,14 @@ public class GameStateListener extends Listener {
      */
     @Override
     public void received(Connection connection, Object incomingData) {
-        GameScreen gameScreen = screenController.getGameScreen();
+        LoadingScreen loadingScreen = screenController.getLoadingScreen();
+        Lobby lobby = loadingScreen.getLobby();
         switch (incomingData) {
             case GameLoaded message: // UpdateHealth message
+                if (message.isLoaded()) {
+                    screenController.setGameScreen(lobby);
+                }
+                System.out.println("switching screens");
                 break;
             default:
                 break;

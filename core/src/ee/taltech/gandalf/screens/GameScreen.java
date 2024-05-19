@@ -65,7 +65,6 @@ public class GameScreen extends ScreenAdapter {
     private final PlayerCharacter clientCharacter;
 
     private final OrthogonalTiledMapRenderer renderer;
-    private final TmxMapLoader mapLoader;
     private final TiledMap map;
 
     private static Texture otherPlayZoneTexture;
@@ -121,7 +120,6 @@ public class GameScreen extends ScreenAdapter {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        mapLoader = new TmxMapLoader();
 
         viewport = new ExtendViewport(Constants.MIN_CHUNKS_SEEN, Constants.MIN_CHUNKS_SEEN,
                 Constants.MAX_TILES_SEEN_WIDTH, Constants.MAX_TILES_SEEN_HEIGHT, camera);
@@ -148,15 +146,15 @@ public class GameScreen extends ScreenAdapter {
         inputMultiplexer.addProcessor(new PlayerInput(game, clientCharacter, this));
 
         layersToBeOrdered = initializeLayersToBeOrdered();
-
         sendReadyState(lobby);
     }
 
-    private void sendReadyState(Lobby lobby) {
-        nc.sendTCP(new GameLoaded(lobby.getId(), true));
+    /**
+     * @param lobby Currently active lobby in play.
+     */
+    public void sendReadyState(Lobby lobby) {
+        game.nc.sendTCP(new GameLoaded(lobby.getId(), true));
     }
-
-
     /**
      * Add specific layers to the list.
      *

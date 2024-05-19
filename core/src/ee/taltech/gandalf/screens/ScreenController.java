@@ -71,7 +71,6 @@ public class ScreenController {
      */
     public void setGameScreen(Lobby lobby) {
         Gdx.app.postRunnable(() -> {
-            gameScreen = new GameScreen(game, lobby);
             game.setScreen(gameScreen);
             game.nc.addGameListeners();
             currentScreen = gameScreen;
@@ -82,6 +81,7 @@ public class ScreenController {
         Gdx.app.postRunnable(() -> {
             loadingScreen = new LoadingScreen(game, lobby);
             game.setScreen(loadingScreen);
+            game.nc.addLoadingListener();
             currentScreen = loadingScreen;
         });
     }
@@ -144,5 +144,12 @@ public class ScreenController {
      */
     public ScreenAdapter getCurrentScreen() {
         return currentScreen;
+    }
+
+    public LoadingScreen getLoadingScreen() {
+        return loadingScreen;
+    }
+    public void loadGameScreen(Lobby lobby) {
+        gameScreen = new GameScreen(game, lobby);
     }
 }
