@@ -4,14 +4,6 @@ import java.util.List;
 
 public class Constants {
     public static float PPM = 32;
-    public static Integer tileWidthOrHeight = 32;
-    public static Integer mapWidthOrHeight = 300;
-    public static float movementSpeed = 5;
-    public static float interpFactor = 0.3f; // For overwrite smoothness
-    public static float maxTilesSeenWidth = 22;
-    public static float maxTilesSeenHeight = 12;
-    public static float minChunksSeen = 10f;
-    public static float statusBarWidthPx = 60;
     public static float MOVEMENT_THRESHOLD = 0.5f;
     public static float FIREBALL_WIDTH = 72 / PPM;
     public static float FIREBALL_HEIGHT = 32 / PPM;

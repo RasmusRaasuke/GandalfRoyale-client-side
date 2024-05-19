@@ -623,12 +623,12 @@ public class GameScreen extends ScreenAdapter {
 
         // Render game objects
         game.batch.begin();
-        camera.zoom = 3f; // To render 3X bigger area than seen.
+        camera.zoom = 3.5f; // To render 3X bigger area than seen.
         renderer.setView(camera);
         renderer.render(Constants.BACKGROUND_LAYERS);
         game.batch.end();
         renderByLayering(); // Render entities and tiles
-        camera.zoom = 1f; // Reset the camera back to its original state.
+        camera.zoom = 2f; // Reset the camera back to its original state.
 
         if (startedGame.getPlayZone() != null) {
             drawPlayZone();
