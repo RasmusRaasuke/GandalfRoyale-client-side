@@ -1,4 +1,13 @@
 # iti0301-2024
+
+## Idea
+
+This is a battle royale game that we wrote in java using Libgdx.
+
+## Trailer
+
+https://www.youtube.com/watch?v=BQvvgYg9uYE
+
 ## Gandalf Royale
 
 Players start empty handed spread around the map. Players have three inventory slots and they can collect different magic weapons and they can also switch between them or drop them. Different weapons have different purposes, some deal damage and some have other uses. The play area shrinks over time until only one player is alive, at which point the game ends. The player can be in the red zone, but will take damage over time.
@@ -11,7 +20,6 @@ Each player has three resources: **health**, **mana** and **gold**.
 **Mana** - Visible to all nearby. Every spell has a different mana cost. Mana regenerates automatically. Used to limit spell casting.
 
 **Gold** - Visible to only the player. Dropped by goblins when killed. Can be used to buy items from the shop.
-
 
 ### Installation and starting
 
