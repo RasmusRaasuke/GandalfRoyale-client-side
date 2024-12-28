@@ -6,7 +6,7 @@ This is a battle royale game that we wrote in java using Libgdx.
 
 ## Trailer
 
-https://www.youtube.com/watch?v=BQvvgYg9uYE
+[![Trailer](https://img.youtube.com/vi/BQvvgYg9uYE/0.jpg)](https://www.youtube.com/watch?v=BQvvgYg9uYE)
 
 ## Gandalf Royale
 
