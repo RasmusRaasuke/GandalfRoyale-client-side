@@ -31,7 +31,7 @@ Each player has three resources: **health**, **mana** and **gold**.
 Server side is up and running on TalTech-s server. So you don't have to run it locally.
 
 But if you want to run it locally then here is guide:
-1. Clone this repository [iti0301-2024-server](https://gitlab.cs.taltech.ee/rkilks/iti0301-2024-server)
+1. Clone this repository [GandalfRoyale-server-side](https://github.com/RasmusRaasuke/GandalfRoyale-server-side)
 2. If you don't have Gradle plugin, download it
 3. Make sure you have server file as module in project structure, if it is not you should make it a module
 4. Make sure the project is running with Java 21 and Language level 21 (SDK default should work also). You can do that in File -> Project Structure -> Project -> SDK and Language level
@@ -39,13 +39,12 @@ But if you want to run it locally then here is guide:
 6. Run this file and you should have working server side
 
 **Client Side:** <br>
-1. Clone this repository [iti0301-2024-game](https://gitlab.cs.taltech.ee/rkilks/iti0301-2024-game)
+1. Clone this repository [GandalfRoyale-client-side](https://github.com/RasmusRaasuke/GandalfRoyale-client-side)
 2. If you don't have Gradle plugin, download it
 3. Load project as Gradle project
 4. Make sure the project is running with Java 21 and Language level 21 (SDK default should work also). You can do that in Project Structure -> Project
 5. From the file tree go to: desktop -> src\[main\] -> ee.taltech.gandalf -> DesktopLauncher
 6. Run DesktopLauncher and you should have working game instance.
-
 Have fun :P
 
 ### How to play and game controlls
